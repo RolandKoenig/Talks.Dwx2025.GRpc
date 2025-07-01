@@ -15,8 +15,12 @@ public class Program
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
 
+        builder.Services.AddRazorComponents()
+            .AddInteractiveWebAssemblyComponents();
+
+
         // ###### Configure request pipeline
-        
+
         var app = builder.Build();
         
         if (app.Environment.IsDevelopment())
@@ -27,19 +31,21 @@ public class Program
         {
             app.UseHsts();
         }
-        
-        app.UseBlazorFrameworkFiles();
+
         app.UseStaticFiles();
         
         app.UseRouting();
+        app.UseAntiforgery();
         
         // gRPC-Web
         app.UseGrpcWeb();
         app.MapGrpcService<GreeterService>().EnableGrpcWeb();
 
         app.MapRazorPages();
-        app.MapControllers(); 
-        app.MapFallbackToFile("index.html");
+        app.MapControllers();
+        app.MapRazorComponents<App>()
+            .AddInteractiveWebAssemblyRenderMode()
+            .AddAdditionalAssemblies(typeof(HappyCoding.GrpcCommunicationFeatures.Server.WithGrpcWeb.Client._Imports).Assembly);
 
         app.Run();
     }

@@ -12,8 +12,6 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebAssemblyHostBuilder.CreateDefault(args);
-        builder.RootComponents.Add<App>("#app");
-        builder.RootComponents.Add<HeadOutlet>("head::after");
 
         builder.Services.AddHttpClient("HappyCoding.GrpcCommunicationFeatures.Server.WithGrpcWeb.ServerAPI",
             client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
